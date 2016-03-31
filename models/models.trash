@@ -1,0 +1,290 @@
+/**
+ * Created by YuriiShipulin on 22.03.2016.
+ */
+//inheritance realization
+function inherit(Child, Parent) {
+    var _temp = function(){};
+    _temp.prototype = Parent.prototype;
+    Child.prototype = new _temp();
+
+    Child.prototype.constructor = Child;
+}
+
+//User class constructor
+function User(role, orders) {
+    this.role = role;
+    if(Array.isArray(orders)) {
+        this.orders = orders
+    } else {
+        this.orders = [orders];
+    }
+}
+
+//User getters
+User.prototype.getOrderId = function () {
+
+    return this.orders;
+};
+
+User.prototype.getRole = function () {
+
+    return this.role;
+};
+
+//User methods
+User.prototype.buy = function () {
+    console.log("BUY inside user");
+};
+
+User.prototype.toString = function () {
+
+    return 'ORDERS : ' + this.orders.toString()
+};
+
+//Customer class constructor
+var Customer = function(role, orders,  userName, surname, password, email, telephone, image, birthDate, lastVisit){
+    User.call(this, role, orders);
+    this.userName = userName;
+    this.surname = surname;
+    this.password = password;
+    this.email = email;
+    this.telephone = telephone;
+    this.image = image;
+    this.birthDate = birthDate;
+    this.lastVisit = lastVisit;
+};
+
+//Customer getters
+Customer.prototype.getName = function(){
+
+    return this.userName;
+};
+
+Customer.prototype.getOrders = function(){
+
+    return this.orders;
+};
+
+Customer.prototype.getSurname = function(){
+
+    return this.surname;
+};
+
+Customer.prototype.getPassword = function(){
+
+    return this.password;
+};
+
+Customer.prototype.getEmail = function(){
+
+    return this.email;
+};
+
+Customer.prototype.getTelephone = function(){
+
+    return this.telephone;
+};
+
+Customer.prototype.getBirthDate = function(){
+
+    return this.birthDate;
+};
+
+Customer.prototype.getLastVisit = function(){
+
+    return this.lastVisit;
+};
+
+inherit(Customer, User);
+
+//Customer methods
+Customer.prototype.buy = function(){
+    console.log("BUY inside customer");
+};
+
+Customer.prototype.toString = function(){
+
+    return 'name: ' + this.surname + ' ' + this.userName + '\r\n' +
+        'ORDERS: ' + this.orders.toString() + '\r\n' +
+        'mail: ' + this.email + '\r\n' +
+        'tel: ' + this.telephone + '\r\n' +
+        'birth date: ' + this.birthDate + '\r\n' +
+        'last visit: ' + this.lastVisit
+};
+
+//Order constructor
+var Order = function(products, orderCode, purchaseDate, invoiceType, prePaid){
+    if(Array.isArray(products)){
+        this.products = products;
+    } else {
+        this.products = [products];
+    }
+    this.orderCode = orderCode;
+    this.purchaseDate = purchaseDate;
+    this.invoiceType = invoiceType;
+    this.prePaid = prePaid;
+};
+
+//Order methods
+Order.prototype.toString = function(){
+
+    return '\r\norder code: ' + this.orderCode + '\r\n' +
+        'purchase date: ' + this.purchaseDate + '\r\n' +
+        'invoiceType: ' + this.invoiceType + '\r\n' +
+        '\tPRODUCTS: ' + this.products.toString()
+};
+
+//Order getters
+Order.prototype.getOrderCode = function(){
+
+    return this.orderCode;
+};
+
+Order.prototype.getProducts = function(){
+
+    return this.products;
+};
+
+Order.prototype.getPurchaseDate = function(){
+
+    return this.purchaseDate;
+};
+
+Order.prototype.getInvoiceType = function(){
+
+    return this.invoiceType;
+};
+
+Order.prototype.getPrePaid = function(){
+
+    return this.prePaid;
+};
+
+//Product constructor
+var Product = function(name, quantity, price, desc, longDesc, image){
+    this.name = name;
+    this.quantity = quantity;
+    this.price = price;
+    this.desc = desc;
+    this.longDesc = longDesc;
+    this.image = image;
+};
+
+//Customer getters
+Product.prototype.getName = function(){
+
+    return this.name;
+};
+
+Product.prototype.getQuantity = function(){
+
+    return this.quantity;
+};
+
+Product.prototype.getPrice = function(){
+
+    return this.price;
+};
+
+Product.prototype.getDesc = function(){
+
+    return this.desc;
+};
+
+Product.prototype.getLongDesc = function(){
+
+    return this.longDesc;
+};
+
+Product.prototype.getImage = function(){
+
+    return this.image;
+};
+
+//Product methods
+Product.prototype.toString = function(){
+
+    return '\r\n\t\tProduct name: ' + this.name + '\r\n' +
+        '\t\tquantity: ' + this.quantity + '\r\n' +
+        '\t\tprice: ' + this.price + '$' + '\r\n' +
+        '\t\tdesc: ' + this.desc
+};
+
+//Category constructor
+var Category = function(name, desc, image, products){
+    this.name = name;
+    this.desc = desc;
+    this.image = image;
+    if(Array.isArray(products)){
+        this.products = products;
+    } else {
+        this.products = [products]
+    }
+};
+
+//Category getters
+Category.prototype.getName = function(){
+
+    return this.name;
+};
+
+Category.prototype.getProducts = function(){
+
+    return this.products;
+};
+
+Category.prototype.getDesc = function(){
+
+    return this.desc;
+};
+
+Category.prototype.getImage = function(){
+
+    return this.image;
+};
+
+//Category methods
+Category.prototype.toString = function(){
+
+    return 'Category name: ' + this.name + '\r\n' +
+        'desc: ' + this.desc + '\r\n' +
+        '\tPRODUCTS: ' + this.products.toString()
+};
+
+//Examples creation
+var product = new Product('Mountin',
+    18,
+    1200,
+    'description...',
+    'long description...',
+    'image_path');
+
+var user = new User(0, [new Order(product ,'666_666', new Date(), 'cash', false), new Order(product, '999_999', new Date(), 'cash', true)]);
+
+var customer = new Customer(0,
+    [new Order(product,'111111_21513', new Date(), 'cash', true), new Order(product, '9841_562515151', new Date(), 'webmoney', false)],
+    'Michael',
+    'Pupkin',
+    '*******',
+    'cusomer@gmail.com',
+    '+380931111111',
+    'image_path',
+    new Date(1992,5,7),
+    new Date());
+
+
+var category = new Category('professional', 'description...', 'image', product);
+
+var order = new Order(product,'9379992', new Date(), 'cash', false);
+
+//Examples logging
+console.log('------------user------------');
+console.log(user.toString());
+console.log('----------customer----------');
+console.log(customer.toString());
+console.log('-----------product----------');
+console.log(product.toString());
+console.log('----------category----------');
+console.log(category.toString());
+console.log('-----------order------------');
+console.log(order.toString());
