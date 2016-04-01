@@ -3,12 +3,13 @@ var Customer = require('../models/customer');
 var Category = require('../models/category');
 
 module.exports = function () {
-    this.renderItem = function (req, res, next) {       //TODO
+    this.renderItem = function (req, res, next) {
         res.send("product");
     };
 
     this.getById = function (req, res, next) {
         var id = req.params.id;
+
         Item
             .findById(id, function (err, item) {
                 if (err) {
@@ -19,8 +20,10 @@ module.exports = function () {
                 }
 
                 if (item.length) {
+
                     res.status(200).send(item);
                 } else {
+
                     res.status(403).send('No such item: ' + req.params.id);
                 }
             });
@@ -47,7 +50,7 @@ module.exports = function () {
 
         Item.findByIdAndRemove(id, function (err) {
 
-            if (err){
+            if (err) {
                 err.status = 400;
                 err.message = 'Bad params: ' + id;
 
@@ -62,7 +65,7 @@ module.exports = function () {
         var id = req.params.id;
         var body = req.body;
 
-        Item.findByIdAndRemove(id, body ,{new : true}, function (err) {
+        Item.findByIdAndRemove(id, body, {new: true}, function (err) {
             if (err) {
                 err.status = 400;
                 err.message = 'Bad params: ' + id;

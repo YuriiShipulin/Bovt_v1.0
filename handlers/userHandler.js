@@ -125,7 +125,7 @@ module.exports = function () {
         var body = req.body;
 
         Customer.findByIdAndUpdate(id, body, {new: true}, function (err) {
-            if (!err) {
+            if (err) {
                 err.status = 400;
                 err.message = 'Bad params';
 

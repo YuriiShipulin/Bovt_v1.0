@@ -80,7 +80,4 @@ schema.methods.deleteComment = function(commentName){
     //TODO
 };
 
-
-
-
 module.exports = mongoose.model("Admin", schema);

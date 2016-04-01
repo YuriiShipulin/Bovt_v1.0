@@ -1,6 +1,6 @@
 var Order = require('../models/order');
 
-module.exports = function(){
+module.exports = function () {
     this.getById = function (req, res, next) {
         var id = req.params.id;
 
@@ -14,8 +14,10 @@ module.exports = function(){
             }
 
             if (order.length) {
+
                 res.status(200).send(order);
             } else {
+
                 res.status(403).send('No such order: ' + req.params.id);
             }
         });
@@ -38,7 +40,7 @@ module.exports = function(){
         var id = req.params.id;
 
         Order.findByIdAndRemove(id, function (err) {
-            if (err){
+            if (err) {
                 err.status = 400;
                 err.message = 'Bad params: ' + id;
 
@@ -53,7 +55,7 @@ module.exports = function(){
         var id = req.params.id;
 
         Order.findByIdAndUpdate(id, body, {new: true}, function (err) {
-            if (err){
+            if (err) {
                 err.status = 400;
                 err.message = 'Bad params: ' + id;
 
