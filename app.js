@@ -34,8 +34,8 @@ app.use(session({
         url: config.get('mongoose:uri'),
         touchAfter: 32 * 3600
     }),
-    resave : true,
-    saveUnitialized : true
+    resave: true,
+    saveUnitialized: true
 }));
 
 app.use('/', routes);
@@ -47,28 +47,34 @@ app.use(function (req, res, next) {
     next(err);
 });
 
-// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
+/**
+ * error handler
+ * production error handler
+ * no stacktraces leaked to user
+ **/
 app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+    var status = err.status || 500;
+
+    if (process.env.NODE_ENV === 'production') {
+        res.status(status).send({error: err.message});
+    } else {
+        res.status(status).send({error: err.message + '\n' + err.stack});
+    }
 });
 
 module.exports = app;
+
+
+/*
+ // development error handler
+ // will print stacktrace
+ if (app.get('env') === 'development') {
+ app.use(function (err, req, res, next) {
+ res.status(err.status || 500);
+ res.render('error', {
+ message: err.message,
+ error: err
+ });
+ });
+ }
+ */

@@ -4,9 +4,9 @@ var ObjectId = Schema.Types.ObjectId;
 
 var schema = new Schema({
 
-    products : [{
+    items : [{
         type : ObjectId,
-        ref : 'Product'
+        ref : 'Item'
     }],
 
     code : {

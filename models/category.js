@@ -9,9 +9,9 @@ var schema = new Schema({
         unique : true
     },
 
-    products : [{
+    items : [{
         type : ObjectId,
-        ref : 'Product'
+        ref : 'Item'
     }],
 
     description : {

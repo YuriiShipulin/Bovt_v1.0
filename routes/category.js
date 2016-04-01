@@ -1,13 +1,15 @@
+var express = require('express');
+var router = express.Router();
+var CategoryHandler = require('../handlers/categoryHandler');
+var categoryHandler = new CategoryHandler();
 
-var categoryHandler = require('../handlers/categoryHandler');
+//done
+router.get('/list', categoryHandler.list);
+router.get('/:id', categoryHandler.findOneById);
+router.put('/:id', categoryHandler.update);
+router.delete('/:id', categoryHandler.delete);
 
-module.exports = function(router){
-    //done
-    router.get('/category', categoryHandler.renderCategory);
-    router.get('/category/get/:id', categoryHandler.get);
-    router.get('/category/getAll', categoryHandler.getAll);
+router.post('/create', categoryHandler.create);
 
-    router.post('/category/create', categoryHandler.create);
-    router.put('/category/update/:id', categoryHandler.update);
-    router.delete('/category/delete/:id', categoryHandler.delete)
-};
+module.exports = router;
+

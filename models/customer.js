@@ -12,12 +12,12 @@ var schema = new Schema({
 
     orders : [{
         type : ObjectId,
-        ref : 'Orders'
+        ref : 'Order'
     }],
 
     comments : [{
         type : ObjectId,
-        ref : 'Comments'
+        ref : 'Comment'
     }],
 
     role : {

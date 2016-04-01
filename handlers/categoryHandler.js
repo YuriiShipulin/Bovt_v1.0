@@ -1,54 +1,75 @@
 var Category = require('../models/category');
 
-var handler = {
-    renderCategory: function (req, res, next) {
-        res.render('category');
-    },
+module.exports = function () {
 
-    get: function (req, res, next) {
-        Category.find({name: req.params.id}, function (err, category) {
-            if (err) return next(err);
+    this.list = function (req, res, next) {
+        Category
+            .find({}, {__v: 0})
+            .lean()
+            .exec(function (err, categories) {
+                if (err) {
+                    err.status = 403;
+                    return next(err);
+                }
+                res.status(200).send(categories);
+            });
+    };
 
-            if (category.length) {
+    this.findOneById = function (req, res, next) {
+        var id = req.params.id;
+
+        Category.findOne({_id: id}, function (err, category) {
+            if (err) {
+                err.status = 400;
+                return next(err);
+            }
+            if (category) {
                 res.status(200).send(category);
             } else {
                 res.status(403).send('No such category: ' + req.params.id);
             }
         });
-    },
+    };
 
-    getAll: function (req, res, next) {
-        Category.find({}, function (err, categories) {
-            if (err) return next(err);
-
-            if (categories) {
-                res.status(200).send(categories);
-            }
-        });
-    },
-
-    create: function (req, res, next) {
+    this.create = function (req, res, next) {
         var category = new Category(req.body);
 
-        category.save(function (err, category) {
-            if (err) return next(err);
+        category.save(function (err) {
+            if (err) {
+                err.status = 400;
+                err.message = 'Bad params';
+                return next(err)
+            }
 
-            //console.log(category);
         });
         res.status(200).send(category.name + ' was created');
-    },
+    };
 
-    delete: function (req, res, next) {
-        Category.remove({name: req.params.id}, function(err) {
-            if (err) return next(err);
+    this.delete = function (req, res, next) {
+        var id = req.params.id;
 
-            res.status(200).send('Category: ' + req.params.id + " deleted");
+        Category.findByIdAndRemove(id, function (err) {
+            if (err) {
+                err.status = 400;
+                err.message = 'Bad params: ' + id;
+
+                return next(err)
+            } else {
+                res.status(200).send('Category: ' + id + " deleted");
+            }
         });
-    },
+    };
 
-    update: function (req, res, next) {                 //TODO
-        res.send('category updating...');
-    }
+    this.update = function (req, res, next) {
+        var id = req.body.params.id;
+        var body = req.body;
+
+        Category.findByIdAndUpdate(id, body, {new: true}, function (err) {
+            if (!err) {
+                res.status(400).send('Bad params');
+            } else {
+                res.status(200).send('Category: ' + id + " updated");
+            }
+        });
+    };
 };
-
-module.exports = handler;

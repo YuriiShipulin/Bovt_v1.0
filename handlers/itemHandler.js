@@ -2,48 +2,75 @@ var Item = require('../models/item');
 var Customer = require('../models/customer');
 var Category = require('../models/category');
 
-var handler = {
-    renderItem: function (req, res, next) {
-        res.render('Item');
-    },
+module.exports = function () {
+    this.renderItem = function (req, res, next) {       //TODO
+        res.send("product");
+    };
 
-    get: function (req, res, next) {
-        Item.find({_id: req.params.id}, function (err, item) {
-            if (err) return next(err);
+    this.getById = function (req, res, next) {
+        var id = req.params.id;
+        Item
+            .findById(id, function (err, item) {
+                if (err) {
+                    err.status = 400;
+                    err.message = 'Bad params: ' + id;
 
-            if (item.length) {
-                res.status(200).send(item);
-            } else {
-                res.status(403).send('No such item: ' + req.params.id);
-            }
-        });
-    },
+                    return next(err)
+                }
 
-    create: function (req, res, next) {
+                if (item.length) {
+                    res.status(200).send(item);
+                } else {
+                    res.status(403).send('No such item: ' + req.params.id);
+                }
+            });
+    };
+
+    this.create = function (req, res, next) {
         var item = new Item(req.body);
 
         item.save(function (err, item) {
 
-            if (err) return next(err);
+            if (err) {
+                err.status = 400;
+                err.message = 'Bad params: ';
 
-            //console.log(item);
+                return next(err)
+            }
         });
 
         res.status(200).send('Item created: ' + item);
-    },
+    };
 
-    delete: function (req, res, next) {
-        Item.remove({_id: req.params.id}, function(err) {
-            if (err) return next(err);
+    this.delete = function (req, res, next) {
+        var id = req.params.id;
+
+        Item.findByIdAndRemove(id, function (err) {
+
+            if (err){
+                err.status = 400;
+                err.message = 'Bad params: ' + id;
+
+                return next(err)
+            }
 
             res.status(200).send('Item: ' + req.params.id + " deleted");
         });
-    },
+    };
 
+    this.update = function (req, res, next) {                     //TODO
+        var id = req.params.id;
+        var body = req.body;
 
-    update: function (req, res, next) {                     //TODO
-        res.send('item updating...');
-    }
+        Item.findByIdAndRemove(id, body ,{new : true}, function (err) {
+            if (err) {
+                err.status = 400;
+                err.message = 'Bad params: ' + id;
+
+                return next(err)
+            }
+
+            res.status(200).send('Item: ' + id + " updated");
+        });
+    };
 };
-
-module.exports = handler;

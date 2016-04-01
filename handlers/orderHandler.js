@@ -1,10 +1,17 @@
 var Order = require('../models/order');
 
-var handler = {
-    get: function (req, res, next) {
-        Order.find({_id: req.params.id}, function (err, order) {
+module.exports = function(){
+    this.getById = function (req, res, next) {
+        var id = req.params.id;
 
-            if (err) return next(err);
+        Order.findById(id, function (err, order) {
+
+            if (err) {
+                err.status = 400;
+                err.message = 'Bad params: ' + id;
+
+                return next(err)
+            }
 
             if (order.length) {
                 res.status(200).send(order);
@@ -12,31 +19,48 @@ var handler = {
                 res.status(403).send('No such order: ' + req.params.id);
             }
         });
-    },
+    };
 
-    create: function (req, res, next) {
+    this.create = function (req, res, next) {
         var order = new Order(req.body);
 
-        order.save(function (err, order) {
+        order.save(function (err) {
+            err.status = 400;
+            err.message = 'Bad params: ';
 
-            if (err) return next(err);
-            //console.log(order);
+            return next(err)
         });
 
         res.status(200).send('Order created: ' + order);
-    },
+    };
 
-    delete: function (req, res, next) {
-        Order.remove({_id: req.params.id}, function (err) {
-            if (err) return next(err);
+    this.delete = function (req, res, next) {
+        var id = req.params.id;
+
+        Order.findByIdAndRemove(id, function (err) {
+            if (err){
+                err.status = 400;
+                err.message = 'Bad params: ' + id;
+
+                return next(err)
+            }
 
             res.status(200).send('Order: ' + req.params.id + " deleted");
         });
-    },
+    };
 
-    update: function (req, res, next) {
-        res.send('order updating...');
-    }
+    this.update = function (req, res, next) {
+        var id = req.params.id;
+
+        Order.findByIdAndUpdate(id, body, {new: true}, function (err) {
+            if (err){
+                err.status = 400;
+                err.message = 'Bad params: ' + id;
+
+                return next(err)
+            }
+
+            res.status(200).send('Order: ' + req.params.id + " updated");
+        });
+    };
 };
-
-module.exports = handler;
