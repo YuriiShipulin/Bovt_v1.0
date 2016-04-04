@@ -86,28 +86,25 @@ module.exports = function () {
     this.getTotalPrice = function (req, res, next) {
         var id = req.params.id;
 
-        var dbQuery = Order
-            .aggregate([{'$match': {_id: id}},
-                {
-                    $unwind: {
-                        path: '$items',
-                        preserveNullAndEmptyArrays: true
-                    }
-                }, {
-                    $group: {
-                        '_id': '$_id',
-                        'price': {$sum: '$items.price'}
-                    }
-                }]);
-
-        dbQuery.exec(function (err, result) {
+        Order
+            .findById(id, {__v: 0})
+            .populate({
+                path: 'items',
+                select: {
+                    price: 1
+                }}).exec(function (err, result) {
             if (err) {
-                err.status = 402;
-                next(err)
+                return next(err);
             }
 
-            console.log(result);
-            res.status(200).send(result);
+            var arr = result.items;
+            var sum = 0;
+            for (var i = 0; i < arr.length; i++) {
+                sum += arr[i].price;
+            }
+
+            res.status(200).send({total_price : sum});
         });
-    };
+    }
 };
+

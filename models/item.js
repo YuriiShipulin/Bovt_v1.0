@@ -9,6 +9,10 @@ var schema = new Schema({
         unique : true
     },
 
+    price : {
+        type : Number
+    },
+
     category : {
         type : String,
         required : true
