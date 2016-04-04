@@ -1,8 +1,11 @@
+var express = require('express');
+var router = express.Router();
+var CommentHandler = require('../handlers/commentHandler');
+var commentHandler = new CommentHandler();
 
-var commentHandler = require('../handlers/orderHandler');
 
-module.exports = function(router){
-    router.get('/:id', commentHandler.getById);
-    router.post('/create', commentHandler.create);
-    router.delete(':id', commentHandler.delete)
-};
+router.get('/:id', commentHandler.getById);
+router.post('/create', commentHandler.create);
+router.delete(':id', commentHandler.delete);
+
+module.exports = router;

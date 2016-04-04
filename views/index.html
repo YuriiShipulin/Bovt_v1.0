@@ -6,21 +6,19 @@
     <title>Home</title>
 </head>
 <body>
-<div class="col-sm-12" align="center">
+<div class="col-sm-6" align="center">
     <h2>Hello inside homepage!</h2>
     <h4><a href="user/signup">Signup</a></h4>
     <h4><a href="user/register">Register</a></h4>
     <h4><a href="user/list">get all users</a></h4>
     <h4><a href="category/list">get all categories</a></h4>
-    <!--<h4><a href="category/get/:id">get Mountain category</a></h4>
-    <h4><a href="category/get/:id">get City category</a></h4>-->
 </div>
-
-<!--<ul>
-    <li><a href="mailto:testuser1@testdomain.com">testuser1</a></li>
-    <li><a href="mailto:testuser2@testdomain.com">testuser2</a></li>
-    <li><a href="mailto:testuser3@testdomain.com">testuser3</a></li>
-</ul>-->
-
+<div class="col-sm-6" align="center">
+    <h2>test picture uploading</h2>
+    <form enctype="multipart/form-data" action="user/upload" method="post">
+        <input type="file" name="upload" multiple="multiple"><br>
+        <input type="submit" value="Upload">
+    </form>
+</div>
 </body>
 </html>

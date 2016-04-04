@@ -2,7 +2,9 @@ var User = require('../models/user');
 var Admin = require('../models/admin');
 var Customer = require('../models/customer');
 var Order = require('../models/order');
-var validator = require('validator');
+//var validator = require('validator');
+var multiparty = require('multiparty');
+var fs = require('fs');
 
 module.exports = function () {
 
@@ -92,7 +94,9 @@ module.exports = function () {
     };
 
     this.register = function (req, res, next) {
-        var customer = new Customer(req.body);
+        var body = req.body;
+
+        var customer = new Customer(body);
         customer.save(function (err, customer) {
 
             if (err) return next(err);
@@ -124,6 +128,8 @@ module.exports = function () {
         var id = req.params.id;
         var body = req.body;
 
+        body.image = image;
+
         Customer.findByIdAndUpdate(id, body, {new: true}, function (err) {
             if (err) {
                 err.status = 400;
@@ -134,6 +140,59 @@ module.exports = function () {
                 res.status(200).send('Customer: ' + id + " updated");
             }
         });
+    };
+
+    this.uploadPicture = function (req, res, next) {
+
+        var form = new multiparty.Form();
+        var uploadFile = {uploadPath: '', type: '', size: ''};
+        var maxSize = 1024 * 1024;
+        var supportedTypes = ['image/jpg', 'image/png', 'image/jpeg'];
+        var errors = [];
+
+        form.on('error', function (err) {
+            if (fs.existsSync(uploadFile.path)) {
+                fs.unlinkSync(uploadFile.path);
+            }
+        });
+
+        form.on('close', function () {
+            if (errors.length == 0) {
+                req.body.image = uploadFile.path;
+                next();
+            }
+
+            else {
+                if (fs.existsSync(uploadFile.path)) {
+                    fs.unlinkSync(uploadFile.path);
+                }
+                next();
+            }
+        });
+
+        form.on('part', function (part) {
+            uploadFile.size = part.byteCount;
+            uploadFile.type = part.headers['content-type'];
+            uploadFile.path = './public/images/profile_pics/' + part.filename;
+
+            if (uploadFile.size > maxSize) {
+                errors.push('File size is ' + uploadFile.size + '. Limit is' + (maxSize / 1024 / 1024) + ' Mb.');
+            }
+
+            if (supportedTypes.indexOf(uploadFile.type) == -1) {
+                errors.push('Unsupported type ' + uploadFile.type);
+            }
+
+            if (errors.length == 0) {
+                var out = fs.createWriteStream(uploadFile.path);
+                part.pipe(out);
+            }
+            else {
+                part.resume();
+            }
+        });
+
+        form.parse(req);
     };
 };
 

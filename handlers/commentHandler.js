@@ -2,7 +2,7 @@ var Comment = require('../models/comment');
 var Customer = require('../models/customer');
 var Item = require('../models/item');
 
-module.explores = function () {
+module.exports = function () {
     this.getById = function (req, res, next) {
         var id = req.params.id;
 
@@ -51,4 +51,3 @@ module.explores = function () {
     };
 };
 
-module.exports = handler;

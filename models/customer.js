@@ -68,7 +68,7 @@ var schema = new Schema({
     },
 
     image : {
-        type: Date,
+        type: String,
         unique: false,
         required: false
     }
