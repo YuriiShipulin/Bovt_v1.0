@@ -18,8 +18,7 @@ app.engine('html', cons.underscore);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, './public/favicon', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -39,6 +38,10 @@ app.use(session({
 }));
 
 app.use('/', routes);
+
+//app.get('/', function (req, res, next) {
+//    res.sendFile(__dirname + '/index_.html')
+//});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

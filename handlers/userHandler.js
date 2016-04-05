@@ -128,7 +128,10 @@ module.exports = function () {
         var id = req.params.id;
         var body = req.body;
 
+        //Samples for testing
         body.image = image;
+        body.orders = '';
+        //
 
         Customer.findByIdAndUpdate(id, body, {new: true}, function (err) {
             if (err) {
@@ -141,6 +144,7 @@ module.exports = function () {
             }
         });
     };
+
 
     this.uploadPicture = function (req, res, next) {
 

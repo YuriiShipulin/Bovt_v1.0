@@ -7,7 +7,6 @@ router.get('/list', categoryHandler.list);
 router.get('/:id', categoryHandler.findOneById);
 router.put('/:id', categoryHandler.update);
 router.delete('/:id', categoryHandler.delete);
-
 router.post('/create', categoryHandler.create);
 
 module.exports = router;
