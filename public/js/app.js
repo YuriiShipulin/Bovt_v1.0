@@ -14,22 +14,19 @@ UserModel = Backbone.Model.extend({
     },
 
     defaults : {
-        role: '',
+        role: '0',
         orders: [],
         comments: [],
         name: '',
         surname: '',
         email: '',
         password: '',
-        age: '',
+        age: 23,
         phone: '',
         lastVisit: Date.now
     }
 });
 
- var user = new UserModel({name:'Ivan', age: '21'});
+var user = new UserModel({name:'Petya', age: '23', email : 'petya@mail.ru'}, {validate : false});
 
-user.on('invalid', function(model, error){
-    console.log('invalid model: ' + error);
-});
 

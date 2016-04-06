@@ -2,7 +2,7 @@ var User = require('../models/user');
 var Admin = require('../models/admin');
 var Customer = require('../models/customer');
 var Order = require('../models/order');
-//var validator = require('validator');
+var validator = require('validator');
 var multiparty = require('multiparty');
 var fs = require('fs');
 
@@ -18,34 +18,55 @@ module.exports = function () {
 
     this.getByIdWithOrders = function (req, res, next) {
         var id = req.params.id;
-        Customer
-            .findById(id, {__v: 0})
-            .populate('orders')
-            .exec(function (err, customer) {
-                if (err) {
 
-                    return next(err);
-                }
+        if (validator.isMongoId(id)) {
+            Customer
+                .findById(id, {__v: 0})
+                .populate('orders')
+                .exec(function (err, customer) {
+                    if (err) {
+                        err.status = 403;
+                        err.message = 'Bad params: ' + id;
 
-                res.status(200).send(customer);
-            });
+                        return next(err);
+                    }
+
+                    res.status(200).send(customer);
+                });
+
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed: ' + id;
+
+            return next(err)
+        }
     };
 
     this.getById = function (req, res, next) {
         var id = req.params.id;
 
-        Customer.findById(id, function (err, customer) {
-            if (err) {
-                err.status = 400;
-                err.message = 'Bad params: ' + id;
-                return next(err);
-            }
-            if (customer) {
-                res.status(200).send(customer);
-            } else {
-                res.status(403).send('No such customer: ' + req.params.id);
-            }
-        });
+        if (validator.isMongoId(id)) {
+
+            Customer.findById(id, function (err, customer) {
+                if (err) {
+                    err.status = 400;
+                    err.message = 'Bad params: ' + id;
+                    return next(err);
+                }
+                if (customer) {
+                    res.status(200).send(customer);
+                } else {
+                    res.status(403).send('No such customer: ' + req.params.id);
+                }
+            });
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed: ' + id;
+
+            return next(err)
+        }
     };
 
     this.list = function (req, res, next) {
@@ -63,8 +84,9 @@ module.exports = function () {
     };
 
     this.login = function (req, res, next) {
-        var body = req.body || null;
-        if (body) {
+        var body = req.body;
+
+        if (validator.isEmail(body.email)) {
             var email = body.email;
             var pass = body.password;
 
@@ -76,7 +98,6 @@ module.exports = function () {
 
                         return next(err);
                     }
-
                     if (customer) {
                         if (customer.checkPassword(pass)) {
                             req.session.customer = customer._id;
@@ -90,62 +111,108 @@ module.exports = function () {
                         res.status(403).send('Not authorized(Login)');
                     }
                 });
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed: ' + body.email;
+
+            return next(err)
         }
     };
 
-    this.create = function (req, res, next) {
+    this.create = function (req, res, next) {                           //VALIDATION TODO
         var body = req.body;
+        var err;
 
-        var customer = new Customer(body);
-        customer.save(function (err, customer) {
+        if (validator.isEmail(body.email)) {
+            if (body.age) {
+                if (body.age <= 12 || body.age >= 100) {
+                    err = new Error();
+                    err.status = 400;
+                    err.message = 'Validation failed: user error must be between 12 & 100 =>' + body.age;
 
-            if (err) {
-                return next(err);
+                    return next(err)
+                }
             }
-            req.session.customer = customer._id;
 
-            res.status(200).send('CUSTOMER SAVED: ' + customer);
-        });
+            var customer = new Customer(body);
+            customer.save(function (err, customer) {
 
+                if (err) {
+                    return next(err);
+                }
+                req.session.customer = customer._id;
 
+                res.status(200).send('CUSTOMER SAVED: ' + customer);
+            });
+        } else {
+            err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed: ' + body.email;
+
+            return next(err)
+        }
     };
 
     this.delete = function (req, res, next) {
         var id = req.params.id;
 
-        Customer.findByIdAndRemove(id, function (err) {
-            if (err) {
-                err.status = 400;
-                err.message = 'Bad params';
+        if (validator.isMongoId(id)) {
+            Customer.findByIdAndRemove(id, function (err) {
+                if (err) {
+                    err.status = 400;
+                    err.message = 'Bad params';
 
-                return next(err);
-            } else {
-                res.status(200).send('Customer: ' + id + " deleted");
-            }
-        });
+                    return next(err);
+                } else {
+                    res.status(200).send('Customer: ' + id + " deleted");
+                }
+            })
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed: ' + id;
+
+            return next(err)
+        }
     };
 
     this.update = function (req, res, next) {
         var id = req.params.id;
         var body = req.body;
+        var err;
 
-        //Samples for testing
-        body.image = image;
-        body.orders = '';
-        //
+        if (validator.isMongoId(id) && validator.isEmail(body.email)) {
+            if (body.age) {
+                if (body.age <= 12 && body.age >= 100) {
+                    err = new Error();
+                    err.status = 400;
+                    err.message = 'Validation failed: user age must be between 12 & 100 =>' + body.age;
 
-        Customer.findByIdAndUpdate(id, body, {new: true}, function (err) {
-            if (err) {
-                err.status = 400;
-                err.message = 'Bad params';
-
-                return next(err)
-            } else {
-                res.status(200).send('Customer: ' + id + " updated");
+                    return next(err)
+                }
             }
-        });
-    };
 
+            body.image = image;
+
+            Customer.findByIdAndUpdate(id, body, {new: true}, function (err) {
+                if (err) {
+                    err.status = 400;
+                    err.message = 'Bad params';
+
+                    return next(err)
+                } else {
+                    res.status(200).send('Customer: ' + id + " updated");
+                }
+            });
+        } else {
+            err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed: ' + id;
+
+            return next(err)
+        }
+    };
 
     this.uploadPicture = function (req, res, next) {
 
@@ -196,10 +263,16 @@ module.exports = function () {
             else {
                 part.resume();
             }
-        });
 
-        form.parse(req);
+            form.parse(req);
+        });
     };
 };
+
+
+
+
+
+
 
 

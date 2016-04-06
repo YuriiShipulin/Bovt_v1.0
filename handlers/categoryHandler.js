@@ -17,21 +17,29 @@ module.exports = function () {
 
     this.findOneById = function (req, res, next) {
         var id = req.params.id;
+        if (validator.isMongoId(id)) {
+            Category
+                .findOne({_id: id}, function (err, category) {
+                if (err) {
+                    err.status = 400;
+                    return next(err);
+                }
+                if (category) {
+                    res.status(200).send(category);
+                } else {
+                    res.status(403).send('No such category: ' + req.params.id);
+                }
+            });
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed:' + id;
 
-        Category.findOne({_id: id}, function (err, category) {
-            if (err) {
-                err.status = 400;
-                return next(err);
-            }
-            if (category) {
-                res.status(200).send(category);
-            } else {
-                res.status(403).send('No such category: ' + req.params.id);
-            }
-        });
+            return next(err);
+        }
     };
 
-    this.create = function (req, res, next) {
+    this.create = function (req, res, next) {       //TODO VALIDATION
         var category = new Category(req.body);
 
         category.save(function (err) {
@@ -48,28 +56,48 @@ module.exports = function () {
     this.delete = function (req, res, next) {
         var id = req.params.id;
 
-        Category.findByIdAndRemove(id, function (err) {
-            if (err) {
-                err.status = 400;
-                err.message = 'Bad params: ' + id;
+        if (validator.isMongoId(id)) {
 
-                return next(err)
-            } else {
-                res.status(200).send('Category: ' + id + " deleted");
-            }
-        });
+            Category
+                .findByIdAndRemove(id, function (err) {
+                if (err) {
+                    err.status = 400;
+                    err.message = 'Bad params: ' + id;
+
+                    return next(err)
+                } else {
+                    res.status(200).send('Category: ' + id + " deleted");
+                }
+            });
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed:' + id;
+
+            return next(err);
+        }
     };
 
-    this.update = function (req, res, next) {
+    this.update = function (req, res, next) {       //TODO VALID
         var id = req.body.params.id;
-        var body = req.body;
+        var body;
 
-        Category.findByIdAndUpdate(id, body, {new: true}, function (err) {
-            if (!err) {
-                res.status(400).send('Bad params');
-            } else {
-                res.status(200).send('Category: ' + id + " updated");
-            }
-        });
+        if (validator.isMongoId(id)) {
+            body = req.body;
+            Category
+                .findByIdAndUpdate(id, body, {new: true}, function (err) {
+                if (!err) {
+                    res.status(400).send('Bad params');
+                } else {
+                    res.status(200).send('Category: ' + id + " updated");
+                }
+            });
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed:' + id;
+
+            return next(err);
+        }
     };
 };

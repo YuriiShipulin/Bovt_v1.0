@@ -22,15 +22,12 @@ var schema = new Schema({
 
     role : {
         type : Number, default : 0,
-        unique : false,
-        required : true
+        unique : false
     },
-
 
     surname : {
         type: String,
-        unique: false,
-        required: false
+        unique: false
     },
 
     passwordHash : {
@@ -56,21 +53,18 @@ var schema = new Schema({
     },
 
     age : {
-        type: Number, min: 18, max: 99,
-        unique: false,
-        required: false
+        type: Number, min: 12, max: 100,
+        unique: false
     },
 
     lastVisit : {
         type: Date, default: Date.now,
-        unique: false,
-        required: false
+        unique: false
     },
 
     image : {
         type: String,
-        unique: false,
-        required: false
+        unique: false
     }
 });
 
