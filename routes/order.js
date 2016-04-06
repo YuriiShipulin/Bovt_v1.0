@@ -4,7 +4,7 @@ var OrderHandler = require('../handlers/orderHandler');
 var orderHandler = new OrderHandler();
 
 router.get('/:id', orderHandler.getById);
-router.post('/create', orderHandler.create);
+router.post('/', orderHandler.create);
 router.put('/:id', orderHandler.update);
 router.delete('/:id', orderHandler.delete);
 router.get('/:id/items', orderHandler.getByIdWithItems);

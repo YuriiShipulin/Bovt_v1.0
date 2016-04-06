@@ -93,20 +93,21 @@ module.exports = function () {
         }
     };
 
-    this.register = function (req, res, next) {
+    this.create = function (req, res, next) {
         var body = req.body;
 
         var customer = new Customer(body);
         customer.save(function (err, customer) {
 
-            if (err) return next(err);
+            if (err) {
+                return next(err);
+            }
+            req.session.customer = customer._id;
 
-            console.log(customer);
+            res.status(200).send('CUSTOMER SAVED: ' + customer);
         });
 
-        req.session.customer = customer._id;
 
-        res.status(200).send('CUSTOMER SAVED: ' + customer);
     };
 
     this.delete = function (req, res, next) {
@@ -148,6 +149,7 @@ module.exports = function () {
 
     this.uploadPicture = function (req, res, next) {
 
+        console.log('inside pucuploading');
         var form = new multiparty.Form();
         var uploadFile = {uploadPath: '', type: '', size: ''};
         var maxSize = 1024 * 1024;

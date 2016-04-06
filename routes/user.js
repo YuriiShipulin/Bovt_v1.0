@@ -6,11 +6,12 @@ var userHandler = new UserHandler();
 router.get('/signup', userHandler.renderSignup);
 router.get('/register', userHandler.renderRegister);
 router.post('/login', userHandler.login);
-router.post('/reg', userHandler.register);
+router.post('/', userHandler.create);
+
 router.get('/list', userHandler.list);
 router.get('/:id', userHandler.getById);
 router.get('/:id/orders', userHandler.getByIdWithOrders);
-router.put('/:id',userHandler.uploadPicture, userHandler.update);
+router.put('/:id',/*userHandler.uploadPicture, */userHandler.update);
 router.delete('/:id', userHandler.delete);
 router.post('/upload', userHandler.uploadPicture);
 

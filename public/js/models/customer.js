@@ -3,6 +3,8 @@
 var CustomerModel = Backbone.Model.extend({
     defaults : {
         role: '',
+        orders: [],
+        comments: [],
         name: '',
         surname: '',
         email: '',
