@@ -3,7 +3,7 @@ var router = express.Router();
 var CategoryHandler = require('../handlers/categoryHandler');
 var categoryHandler = new CategoryHandler();
 
-router.get('/list', categoryHandler.list);
+router.get('/', categoryHandler.list);
 router.get('/:id', categoryHandler.findOneById);
 router.put('/:id', categoryHandler.update);
 router.delete('/:id', categoryHandler.delete);

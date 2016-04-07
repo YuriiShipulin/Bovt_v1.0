@@ -31,17 +31,49 @@ module.exports = function () {
         }
     };
 
+    this.list = function (req, res, next) {
+        Order
+            .find({}, {__v: 0})
+            .lean()
+            .exec(function (err, orders) {
+                if (err) {
+                    err.status = 403;
+                    return next(err);
+                }
+                res.status(200).send(orders);
+            });
+    };
+
     this.create = function (req, res, next) {
-        var order = new Order(req.body);                    //VALIDATION TODO
+        var errorMessage;
+        var body = req.body;
 
-        order.save(function (err) {
+        if (isNaN(body.code)) {
+            errorMessage = 'Validation failed: ' + body.code + '\r\n';
+        }
+
+        if (!validator.isDate(body.purchaseDate)) {
+            errorMessage = 'Validation failed: ' + body.purchaseDate + '\r\n';
+        }
+
+        if(errorMessage){
+            var err = new Error(errorMessage);
             err.status = 400;
-            err.message = 'Bad params: ';
 
-            return next(err)
-        });
+            return next(err);
+        } else {
 
-        res.status(200).send('Order created: ' + order);
+            var order = new Order(req.body);
+
+            order.save(function (err) {
+                err.status = 400;
+                err.message = 'Bad params: ';
+
+                return next(err)
+            });
+
+            res.status(200).send('Order created: ' + order);
+        }
     };
 
     this.delete = function (req, res, next) {
@@ -69,10 +101,28 @@ module.exports = function () {
     };
 
     this.update = function (req, res, next) {
+        var errorMessage;
+        var body = req.body;
         var id = req.params.id;
 
-        if (validator.isMongoId(id)) {
+        if (!validator.isMongoId(id)) {
+            errorMessage = 'Validation failed: ' + id + '\r\n';
+        }
 
+        if (body.code && isNaN(body.code)) {
+            errorMessage = 'Validation failed: ' + body.code + '\r\n';
+        }
+
+        if (body.purchaseDate && !validator.isDate(body.purchaseDate)) {
+            errorMessage = 'Validation failed: ' + body.purchaseDate + '\r\n';
+        }
+
+        if(errorMessage){
+            var err = new Error(errorMessage);
+            err.status = 400;
+
+            return next(err);
+        } else {
             Order.findByIdAndUpdate(id, body, {new: true}, function (err) {
                 if (err) {
                     err.status = 400;
@@ -83,12 +133,6 @@ module.exports = function () {
 
                 res.status(200).send('Order: ' + req.params.id + " updated");
             });
-        } else {
-            var err = new Error();
-            err.status = 400;
-            err.message = 'Validation failed: ' + id;
-
-            return next(err)
         }
     };
 

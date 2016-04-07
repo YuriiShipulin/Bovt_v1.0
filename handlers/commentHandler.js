@@ -34,6 +34,19 @@ module.exports = function () {
         }
     };
 
+    this.list = function (req, res, next) {
+        Comment
+            .find({}, {__v: 0})
+            .lean()
+            .exec(function (err, comments) {
+                if (err) {
+                    err.status = 403;
+                    return next(err);
+                }
+                res.status(200).send(comments);
+            });
+    };
+
     this.create = function (req, res, next) {                   //TODO VALIDATION
         var comment = new Comment(req.body);
 

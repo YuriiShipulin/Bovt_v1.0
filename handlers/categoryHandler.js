@@ -8,7 +8,7 @@ module.exports = function () {
             .lean()
             .exec(function (err, categories) {
                 if (err) {
-                    err.status = 403;
+                    err.status = 400;
                     return next(err);
                 }
                 res.status(200).send(categories);

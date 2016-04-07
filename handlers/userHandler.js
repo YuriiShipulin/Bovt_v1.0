@@ -101,7 +101,7 @@ module.exports = function () {
                     if (customer) {
                         if (customer.checkPassword(pass)) {
                             req.session.customer = customer._id;
-                            res.status(200).send('authorized succesfully')
+                            res.status(200).send('authorized successfully')
                         } else {
 
                             res.status(403).send('Not authorized(Password)')
@@ -122,35 +122,46 @@ module.exports = function () {
 
     this.create = function (req, res, next) {                           //VALIDATION TODO
         var body = req.body;
-        var err;
+        var errorMessage;
 
-        if (validator.isEmail(body.email)) {
-            if (body.age) {
-                if (body.age <= 12 || body.age >= 100) {
-                    err = new Error();
-                    err.status = 400;
-                    err.message = 'Validation failed: user error must be between 12 & 100 =>' + body.age;
+        if(body.role){
+            body.role = null;
+        }
 
-                    return next(err)
-                }
-            }
+        if (body.name && !validator.isAlpha(body.name)) {
+            errorMessage = 'Validation failed: ' + body.name + '\r\n';
+        }
 
+        if (body.surname && !validator.isAlpha(body.surname)) {
+            errorMessage += 'Validation failed: ' + body.surname + '\r\n';
+        }
+
+        if (body.email && !validator.isEmail(body.email)) {
+            errorMessage += 'Validation failed: ' + body.email + '\r\n';
+        }
+
+        if (body.age && (body.age < 12 || body.age > 99)) {
+            errorMessage += 'Validation failed: user age must be between 12 & 100: ' + body.age + '\r\n';
+        }
+
+        if (errorMessage) {
+            var err = new Error(errorMessage);
+            err.status = 400;
+
+            return next(err);
+        } else {
             var customer = new Customer(body);
             customer.save(function (err, customer) {
 
                 if (err) {
+                    err.message = "WTF"; //TODO
+                    err.status = 400;
+
                     return next(err);
                 }
                 req.session.customer = customer._id;
-
                 res.status(200).send('CUSTOMER SAVED: ' + customer);
             });
-        } else {
-            err = new Error();
-            err.status = 400;
-            err.message = 'Validation failed: ' + body.email;
-
-            return next(err)
         }
     };
 
@@ -168,6 +179,7 @@ module.exports = function () {
                     res.status(200).send('Customer: ' + id + " deleted");
                 }
             })
+
         } else {
             var err = new Error();
             err.status = 400;
@@ -180,37 +192,50 @@ module.exports = function () {
     this.update = function (req, res, next) {
         var id = req.params.id;
         var body = req.body;
-        var err;
+        var errorMessage;
 
-        if (validator.isMongoId(id) && validator.isEmail(body.email)) {
-            if (body.age) {
-                if (body.age <= 12 && body.age >= 100) {
-                    err = new Error();
-                    err.status = 400;
-                    err.message = 'Validation failed: user age must be between 12 & 100 =>' + body.age;
+        if(body.role){
+            body.role = null;
+        }
 
-                    return next(err)
-                }
-            }
+        if (!validator.isMongoId(id)) {
+            errorMessage = 'Validation failed: ' + id + '\r\n';
+        }
 
-            body.image = image;
+        if (body.name && !validator.isAlpha(body.name)) {
+            errorMessage = 'Validation failed: ' + body.name + '\r\n';
+        }
 
+        if (body.surname && !validator.isAlpha(body.surname)) {
+            errorMessage = 'Validation failed: ' + body.surname + '\r\n';
+        }
+
+        if (body.email && !validator.isEmail(body.email)) {
+            errorMessage += 'Validation failed: ' + body.email + '\r\n';
+        }
+
+        if (body.age && (body.age < 12 || body.age > 99)) {
+            errorMessage = 'Validation failed: user age must be between 12 & 100: ' + body.age + '\r\n';
+        }
+
+        if (errorMessage) {
+            var err = new Error(errorMessage);
+            err.status = 400;
+
+            return next(err);
+        } else {
+            //body.image = image;
             Customer.findByIdAndUpdate(id, body, {new: true}, function (err) {
                 if (err) {
                     err.status = 400;
                     err.message = 'Bad params';
 
                     return next(err)
+
                 } else {
                     res.status(200).send('Customer: ' + id + " updated");
                 }
             });
-        } else {
-            err = new Error();
-            err.status = 400;
-            err.message = 'Validation failed: ' + id;
-
-            return next(err)
         }
     };
 
@@ -268,6 +293,7 @@ module.exports = function () {
         });
     };
 };
+
 
 
 

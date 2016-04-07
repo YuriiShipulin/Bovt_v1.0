@@ -38,6 +38,19 @@ module.exports = function () {
         }
     };
 
+    this.list = function (req, res, next) {
+        Items
+            .find({}, {__v: 0})
+            .lean()
+            .exec(function (err, items) {
+                if (err) {
+                    err.status = 403;
+                    return next(err);
+                }
+                res.status(200).send(items);
+            });
+    };
+
     this.create = function (req, res, next) {                   //TODO VALIDATION
         var item = new Item(req.body);
 

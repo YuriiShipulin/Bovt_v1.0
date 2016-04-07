@@ -5,6 +5,7 @@ var commentHandler = new CommentHandler();
 
 
 router.get('/:id', commentHandler.getById);
+router.get('/', commentHandler.list);               //TODO
 router.post('/', commentHandler.create);
 router.delete(':id', commentHandler.delete);
 

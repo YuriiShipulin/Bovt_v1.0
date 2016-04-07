@@ -11,7 +11,7 @@ var schema = new Schema({
 
     code : {
         type : [String],
-        unique : true
+        default: parseInt(Math.random * 1000000)
     },
 
     purchaseDate : {

@@ -1,32 +1,8 @@
-UserModel = Backbone.Model.extend({
-    idAttribute: '_id',
 
-    urlRoot: function () {
-        return '/user/';
-    },
+var customer = new Customer({name: 'Roma', email: 'petya@mail.ru'}, {validate: false});
 
-    validate: function(attrs){
-        if(attrs.age) {
-            if (attrs.age < 18) {
-                return 'invalid service for you'
-            }
-        }
-    },
+var customers = new Customers();
 
-    defaults : {
-        role: '0',
-        orders: [],
-        comments: [],
-        name: '',
-        surname: '',
-        email: '',
-        password: '',
-        age: 23,
-        phone: '',
-        lastVisit: Date.now
-    }
-});
+//customers.fetch();
 
-var user = new UserModel({name:'Petya', age: '23', email : 'petya@mail.ru'}, {validate : false});
-
-
+//users.fetch({reset: true}); //TRUE RESET
