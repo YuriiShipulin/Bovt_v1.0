@@ -1,6 +1,6 @@
-var Customers = Backbone.Collection.extend({
-    model: Customer,
-    url: '/user/',
+var Categories = Backbone.Collection.extend({
+    model: Category,
+    url: '/category/',
 
     initialize: function (opt) {
         this.on('add', function () {
@@ -21,10 +21,8 @@ var Customers = Backbone.Collection.extend({
 
         this.fetch({
             reset : true,
-            //type : 'GET',                         //req type
-            //data: {a : 10, b : 20},               //query
             success: function(model, xhr, options){
-                console.log('===== users fetched =====')
+                console.log('===== category fetched =====')
             },
 
             error: function(model, xhr, options){

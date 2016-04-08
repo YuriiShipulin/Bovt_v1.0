@@ -15,11 +15,6 @@ var schema = new Schema({
         required: false
     },
 
-    orders : [{
-        type : ObjectId,
-        ref : 'Orders'
-    }],
-
     comments : [{
         type : ObjectId,
         ref : 'Comments'
@@ -29,7 +24,6 @@ var schema = new Schema({
         type: String,
         required: true
     }
-
 });
 
 schema.methods.encryptPassword = function(password){

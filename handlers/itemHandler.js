@@ -39,7 +39,7 @@ module.exports = function () {
     };
 
     this.list = function (req, res, next) {
-        Items
+        Item
             .find({}, {__v: 0})
             .lean()
             .exec(function (err, items) {

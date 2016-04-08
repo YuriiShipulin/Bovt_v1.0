@@ -48,8 +48,15 @@ module.exports = function () {
     };
 
     this.create = function (req, res, next) {                   //TODO VALIDATION
-        var comment = new Comment(req.body);
 
+        if(req.body.text.length > 120){
+            var err = new Error('invalid message length ( > 120)');
+            err.status = 400;
+
+            return next(err);
+        }
+
+        var comment = new Comment(req.body);
         comment.save(function (err) {
 
             if (err) return next(err);

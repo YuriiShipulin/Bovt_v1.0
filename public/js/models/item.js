@@ -1,16 +1,11 @@
-var Customer = Backbone.Model.extend({
+var Item = Backbone.Model.extend({
     idAttribute: '_id',
 
     urlRoot: function () {
-        return '/user/';
+        return '/item/';
     },
 
     validate: function(attrs){
-        if(attrs.age) {
-            if (attrs.age < 18) {
-                return 'invalid service for you'
-            }
-        }
     },
 
     initialize: function (options) {
@@ -29,18 +24,13 @@ var Customer = Backbone.Model.extend({
     },
 
     defaults : {
-        role: '0',
-        orders: [],
-        comments: [],
         name: '',
-        surname: '',
-        email: '',
-        password: '',
-        age: 23,
-        phone: '',
+        price: '',
+        category: '',
+        quantity: 0,
+        description: '',
+        longDesc: '',
         image: '',
-        lastVisit: Date.now
+        comments: []
     }
 });
-
-//var user = new Customer({name:'Roma', email : 'petya@mail.ru'}, {validate : false});

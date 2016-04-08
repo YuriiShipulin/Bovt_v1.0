@@ -24,7 +24,7 @@ var schema = new Schema({
     },
 
     isPaid : {
-        type : Boolean
+        type : Boolean, default: false
     }
 });
 

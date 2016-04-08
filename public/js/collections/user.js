@@ -1,5 +1,5 @@
-var Customers = Backbone.Collection.extend({
-    model: Customer,
+var Users = Backbone.Collection.extend({
+    model: User,
     url: '/user/',
 
     initialize: function (opt) {
@@ -21,8 +21,6 @@ var Customers = Backbone.Collection.extend({
 
         this.fetch({
             reset : true,
-            //type : 'GET',                         //req type
-            //data: {a : 10, b : 20},               //query
             success: function(model, xhr, options){
                 console.log('===== users fetched =====')
             },
@@ -33,3 +31,4 @@ var Customers = Backbone.Collection.extend({
         })
     }
 });
+
