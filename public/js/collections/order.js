@@ -23,6 +23,7 @@ define([
                 console.log(':Reset')
             });
 
+            //remove from init block
             this.fetch({
                 reset: true,
                 success: function (model, xhr, options) {

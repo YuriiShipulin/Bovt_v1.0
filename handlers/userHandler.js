@@ -124,20 +124,20 @@ module.exports = function () {
         var body = req.body;
         var errorMessage;
 
-        if(body.role){
+       /* if(body.role){                                                //VALIDATION TODO
             body.role = null;
-        }
+        }*/
 
         if (body.name && !validator.isAlpha(body.name)) {
-            errorMessage = 'Validation failed: ' + body.name + '\r\n';
+            errorMessage = 'Validation failed on Name: ' + body.name + '\r\n';
         }
 
         if (body.surname && !validator.isAlpha(body.surname)) {
-            errorMessage += 'Validation failed: ' + body.surname + '\r\n';
+            errorMessage += 'Validation failed on Surname: ' + body.surname + '\r\n';
         }
 
         if (body.email && !validator.isEmail(body.email)) {
-            errorMessage += 'Validation failed: ' + body.email + '\r\n';
+            errorMessage += 'Validation failed on Email: ' + body.email + '\r\n';
         }
 
         if (body.age && (body.age < 12 || body.age > 99)) {
@@ -154,7 +154,7 @@ module.exports = function () {
             customer.save(function (err, customer) {
 
                 if (err) {
-                    err.message = "WTF"; //TODO
+                    err.message = "Unknown error while user saving";
                     err.status = 400;
 
                     return next(err);

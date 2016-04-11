@@ -47,5 +47,3 @@ define(['backbone'], function(Backbone) {
 
     return Customer;
 });
-
-//var user = new Customer({name:'Roma', email : 'petya@mail.ru'}, {validate : false});

@@ -5,7 +5,8 @@ require.config({
         underscore : './libs/underscore/underscore',
         model      : './models',
         collections: './collections',
-        views      : './views'
+        views      : './views',
+        text       : './libs/text/text'
     },
 
     shim: {

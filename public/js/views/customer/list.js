@@ -1,16 +1,22 @@
+
 define([
     'backbone',
-    'collections/customer'
-], function(Backbone, Customers){
+    'collections/customer',
+    'underscore',
+    'text!templates/customerTemplate.htm'
+
+], function(Backbone, Customers, _, customerTemplate){
+
     var View = Backbone.View.extend({
 
         el: '#container',
+
+        template: _.template(customerTemplate),
 
         initialize : function(){
             var self = this;
 
             this.customesrList = new Customers();
-
             this.customesrList.fetch({
                 reset: true,
                 success: function (model, xhr, options) {
@@ -22,21 +28,24 @@ define([
                     console.log('fetch error')
                 }
             });
-
         },
 
         render : function(){
-            console.dir(this.customesrList);
+            var self = this;
 
-            this.$el.html(JSON.stringify(this.customesrList));
+            this.customesrList.each(function(customer){
+                self.$el.append(self.template(customer.toJSON()));
+            });
+
         }
-       /* tagName: 'ul',
-        className: 'my-class',
-        id: 'temp',
-        attributes: {
-            'data-name': 'temp'
-        }*/
     });
 
     return View;
 });
+
+/* tagName: 'ul',
+ className: 'my-class',
+ id: 'temp',
+ attributes: {
+ 'data-name': 'temp'
+ }*/

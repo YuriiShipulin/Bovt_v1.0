@@ -1,0 +1,14 @@
+
+
+
+<div id="customerTemplate" class="col-sm-3" align="left">
+    <img src="<%= image %>" style="width:120px;height:120px"/>
+    <h5>Name: <%= name ? name : 'unknown' %></h5>
+    <p>age: <%= age %></p>
+    <p>Tel: <%= phone %></p>
+    <h5>Email: <a href="mailto:<%= email %>"><%= email %></a></h5>
+    <div>-----------------------</div>
+</div>
+
+<!--
+? image : '/images/profile_pics/placeholder.png'-->
