@@ -1,33 +1,40 @@
-var Comments = Backbone.Collection.extend({
-    model: Comment,
-    url: '/comment/',
+define([
+    'backbone',
+    'models/comment'], function(Backbone, Comment) {
 
-    initialize: function (opt) {
-        this.on('add', function () {
-            console.log(':Added');
-        });
+    var Comments = Backbone.Collection.extend({
+        model: Comment,
+        url: '/comment/',
 
-        this.on('remove', function () {
-            console.log(':Removed');
-        });
+        initialize: function (opt) {
+            this.on('add', function () {
+                console.log(':Added');
+            });
 
-        this.on('update', function () {
-            console.log(':Updated');
-        });
+            this.on('remove', function () {
+                console.log(':Removed');
+            });
 
-        this.on('reset', function(){
-            console.log(':Reset')
-        });
+            this.on('update', function () {
+                console.log(':Updated');
+            });
 
-        this.fetch({
-            reset : true,
-            success: function(model, xhr, options){
-                console.log('===== comments fetched =====')
-            },
+            this.on('reset', function () {
+                console.log(':Reset')
+            });
 
-            error: function(model, xhr, options){
-                console.log('fetch error')
-            }
-        })
-    }
+            this.fetch({
+                reset: true,
+                success: function (model, xhr, options) {
+                    console.log('===== comments fetched =====')
+                },
+
+                error: function (model, xhr, options) {
+                    console.log('fetch error')
+                }
+            })
+        }
+    });
+
+    return Comments;
 });

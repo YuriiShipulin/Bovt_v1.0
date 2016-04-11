@@ -241,7 +241,6 @@ module.exports = function () {
 
     this.uploadPicture = function (req, res, next) {
 
-        console.log('inside pucuploading');
         var form = new multiparty.Form();
         var uploadFile = {uploadPath: '', type: '', size: ''};
         var maxSize = 1024 * 1024;

@@ -1,20 +1,17 @@
 
 //var customer = new Customer({name: 'Roma', email: 'petya@mail.ru'}, {validate: false});
 
-var customers = new Customers();
-
-var comments = new Comments();
-
-var orders = new Orders();
-
-var categories = new Categories();
-
-var items = new Items();
-
-var users = new Users();
+define(['views/customer/list'], function(Customers){
+    function init(){
+        console.log('---- initialize app ----');
+        var customer = new Customers();
+        console.log(customer);
+    }
 
 
-
-//customers.fetch();
+    return {
+        initialize: init
+    }
+});
 
 //users.fetch({reset: true}); //TRUE RESET

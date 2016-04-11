@@ -1,34 +1,41 @@
-var Admins = Backbone.Collection.extend({
-    model: Admin,
-    url: '/admin/',
+define([
+    'backbone',
+    'models/admin'], function(Backbone, Admin) {
 
-    initialize: function (opt) {
-        this.on('add', function () {
-            console.log(':Added');
-        });
+    var Admins = Backbone.Collection.extend({
+        model: Admin,
+        url: '/admin/',
 
-        this.on('remove', function () {
-            console.log(':Removed');
-        });
+        initialize: function (opt) {
+            this.on('add', function () {
+                console.log(':Added');
+            });
 
-        this.on('update', function () {
-            console.log(':Updated');
-        });
+            this.on('remove', function () {
+                console.log(':Removed');
+            });
 
-        this.on('reset', function(){
-            console.log(':Reset')
-        });
+            this.on('update', function () {
+                console.log(':Updated');
+            });
 
-        this.fetch({
-            reset : true,
-            success: function(model, xhr, options){
-                console.log('===== admins fetched =====')
-            },
+            this.on('reset', function () {
+                console.log(':Reset')
+            });
 
-            error: function(model, xhr, options){
-                console.log('fetch error')
-            }
-        })
-    }
+            this.fetch({
+                reset: true,
+                success: function (model, xhr, options) {
+                    console.log('===== admins fetched =====')
+                },
+
+                error: function (model, xhr, options) {
+                    console.log('fetch error')
+                }
+            })
+        }
+    });
+
+    return Admins;
 });
 

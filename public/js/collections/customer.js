@@ -1,35 +1,29 @@
-var Customers = Backbone.Collection.extend({
-    model: Customer,
-    url: '/user/',
+define([
+    'backbone',
+    'models/customer'], function(Backbone, Customer) {
 
-    initialize: function (opt) {
-        this.on('add', function () {
-            console.log(':Added');
-        });
+    var Customers = Backbone.Collection.extend({
+        model: Customer,
+        url: '/user/',
 
-        this.on('remove', function () {
-            console.log(':Removed');
-        });
+        initialize: function (opt) {
+            this.on('add', function () {
+                console.log(':Added');
+            });
 
-        this.on('update', function () {
-            console.log(':Updated');
-        });
+            this.on('remove', function () {
+                console.log(':Removed');
+            });
 
-        this.on('reset', function(){
-            console.log(':Reset')
-        });
+            this.on('update', function () {
+                console.log(':Updated');
+            });
 
-        this.fetch({
-            reset : true,
-            //type : 'GET',                         //req type
-            //data: {a : 10, b : 20},               //query
-            success: function(model, xhr, options){
-                console.log('===== users fetched =====')
-            },
+            this.on('reset', function () {
+                console.log(':Reset')
+            });
+        }
+    });
 
-            error: function(model, xhr, options){
-                console.log('fetch error')
-            }
-        })
-    }
+    return Customers;
 });

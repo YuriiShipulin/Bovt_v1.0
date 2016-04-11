@@ -1,36 +1,41 @@
-var Item = Backbone.Model.extend({
-    idAttribute: '_id',
+define(['backbone'], function (Backbone) {
 
-    urlRoot: function () {
-        return '/item/';
-    },
+    var Item = Backbone.Model.extend({
+        idAttribute: '_id',
 
-    validate: function(attrs){
-    },
+        urlRoot: function () {
+            return '/item/';
+        },
 
-    initialize: function (options) {
+        validate: function (attrs) {
+        },
 
-        this.on('invalid', function(model, error){
-            console.log('Invalid model ' + error);
-        });
+        initialize: function (options) {
 
-        this.on('change', function(model, error){
-            console.log('model changed');
-        });
+            this.on('invalid', function (model, error) {
+                console.log('Invalid model ' + error);
+            });
 
-        this.on('change:name', function(model, error){
-            console.log('name is changed');
-        });
-    },
+            this.on('change', function (model, error) {
+                console.log('model changed');
+            });
 
-    defaults : {
-        name: '',
-        price: '',
-        category: '',
-        quantity: 0,
-        description: '',
-        longDesc: '',
-        image: '',
-        comments: []
-    }
+            this.on('change:name', function (model, error) {
+                console.log('name is changed');
+            });
+        },
+
+        defaults: {
+            name: '',
+            price: '',
+            category: '',
+            quantity: 0,
+            description: '',
+            longDesc: '',
+            image: '',
+            comments: []
+        }
+    });
+
+    return Item;
 });

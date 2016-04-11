@@ -1,34 +1,41 @@
-var Orders = Backbone.Collection.extend({
-    model: Order,
-    url: '/order/',
+define([
+    'backbone',
+    'models/order'], function (Backbone, Order) {
 
-    initialize: function (opt) {
-        this.on('add', function () {
-            console.log(':Added');
-        });
+    var Orders = Backbone.Collection.extend({
+        model: Order,
+        url: '/order/',
 
-        this.on('remove', function () {
-            console.log(':Removed');
-        });
+        initialize: function (opt) {
+            this.on('add', function () {
+                console.log(':Added');
+            });
 
-        this.on('update', function () {
-            console.log(':Updated');
-        });
+            this.on('remove', function () {
+                console.log(':Removed');
+            });
 
-        this.on('reset', function(){
-            console.log(':Reset')
-        });
+            this.on('update', function () {
+                console.log(':Updated');
+            });
 
-        this.fetch({
-            reset : true,
-            success: function(model, xhr, options){
-                console.log('===== orders fetched =====')
-            },
+            this.on('reset', function () {
+                console.log(':Reset')
+            });
 
-            error: function(model, xhr, options){
-                console.log('fetch error')
-            }
-        })
-    }
+            this.fetch({
+                reset: true,
+                success: function (model, xhr, options) {
+                    console.log('===== orders fetched =====')
+                },
+
+                error: function (model, xhr, options) {
+                    console.log('fetch error')
+                }
+            })
+        }
+    });
+
+    return Orders;
 });
 

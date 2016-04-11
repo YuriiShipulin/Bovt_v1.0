@@ -1,32 +1,37 @@
-var Comment = Backbone.Model.extend({
-    idAttribute: '_id',
+define(['backbone'], function(Backbone) {
 
-    urlRoot: function () {
-        return '/comment/';
-    },
+    var Comment = Backbone.Model.extend({
+        idAttribute: '_id',
 
-    validate: function(attrs){
-    },
+        urlRoot: function () {
+            return '/comment/';
+        },
 
-    initialize: function (options) {
+        validate: function (attrs) {
+        },
 
-        this.on('invalid', function(model, error){
-            console.log('Invalid model ' + error);
-        });
+        initialize: function (options) {
 
-        this.on('change', function(model, error){
-            console.log('model changed');
-        });
+            this.on('invalid', function (model, error) {
+                console.log('Invalid model ' + error);
+            });
 
-        this.on('change:text', function(model, error){
-            console.log('text is changed');
-        });
-    },
+            this.on('change', function (model, error) {
+                console.log('model changed');
+            });
 
-    defaults : {
-        customer: '',
-        item: '',
-        text: '',
-        date: Date.now
-    }
+            this.on('change:text', function (model, error) {
+                console.log('text is changed');
+            });
+        },
+
+        defaults: {
+            customer: '',
+            item: '',
+            text: '',
+            date: Date.now
+        }
+    });
+
+    return Comment;
 });
