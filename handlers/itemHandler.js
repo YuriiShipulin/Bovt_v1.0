@@ -4,9 +4,6 @@ var Category = require('../models/category');
 var validator = require('validator');
 
 module.exports = function () {
-    this.renderItem = function (req, res, next) {
-        res.send('');
-    };
 
     this.getById = function (req, res, next) {
         var id = req.params.id;

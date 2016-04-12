@@ -1,4 +1,5 @@
 var Category = require('../models/category');
+var validator = require('validator');
 
 module.exports = function () {
 
@@ -13,6 +14,36 @@ module.exports = function () {
                 }
                 res.status(200).send(categories);
             });
+    };
+
+    this.findItemsById = function (req, res, next) {
+        var id = req.params.id;
+        var items;
+
+        if (validator.isMongoId(id)) {
+
+            Category
+                .findById(id, {__v: 0})
+                .populate({path: 'items'})
+                .exec(function (err, category){
+
+                    if (err) {
+                        err.status = 400;
+                        return next(err);
+                    }
+
+                    items = category.items;
+                    res.status(200).send(items);
+                    //res.status(200).send(category);       //sends JSON file instead of array
+                });
+
+        } else {
+            var err = new Error();
+            err.status = 400;
+            err.message = 'Validation failed:' + id;
+
+            return next(err);
+        }
     };
 
     this.findOneById = function (req, res, next) {
@@ -30,6 +61,7 @@ module.exports = function () {
                     res.status(403).send('No such category: ' + req.params.id);
                 }
             });
+
         } else {
             var err = new Error();
             err.status = 400;
@@ -69,6 +101,7 @@ module.exports = function () {
                     res.status(200).send('Category: ' + id + " deleted");
                 }
             });
+
         } else {
             var err = new Error();
             err.status = 400;
@@ -92,6 +125,7 @@ module.exports = function () {
                     res.status(200).send('Category: ' + id + " updated");
                 }
             });
+
         } else {
             var err = new Error();
             err.status = 400;

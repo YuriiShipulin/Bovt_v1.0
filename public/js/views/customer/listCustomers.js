@@ -3,15 +3,16 @@ define([
     'backbone',
     'collections/customer',
     'underscore',
-    'text!/templates/customer/customerTemplate.htm'
+    'text!/templates/customer/tableTemplate.html',
+    'text!/templates/customer/list.html'
 
-], function(Backbone, Customers, _, customerTemplate){
+], function(Backbone, Customers, _, tableTemplate, list){
 
     var View = Backbone.View.extend({
 
-        el: '#container',
+        el: '#content',
 
-        template: _.template(customerTemplate),
+        template: _.template(tableTemplate),
 
         initialize : function(){
             var self = this;
@@ -25,18 +26,8 @@ define([
             });
         },
 
-        events: {
-           'click div' : 'onDivClick'
-        },
-
-        onDivClick : function(e){
-            e.stopPropagation();
-            console.log('---click on customer img---');
-        },
-
         render : function(){
             var self = this;
-
             this.customersList.each(function(customer){
                 self.$el.append(self.template(customer.toJSON()));
             });

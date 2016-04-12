@@ -6,6 +6,7 @@ require.config({
         model      : './models',
         collections: './collections',
         views      : './views',
+        templates      : '../templates',
         text       : './libs/text/text'
     },
 

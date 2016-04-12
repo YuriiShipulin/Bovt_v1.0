@@ -186,6 +186,7 @@ module.exports = function () {
 
                 res.status(200).send({total_price: sum});
             });
+
         } else {
             var err = new Error();
             err.status = 400;

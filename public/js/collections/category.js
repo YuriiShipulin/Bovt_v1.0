@@ -24,7 +24,7 @@ define([
             });
 
             //remove from init block
-            this.fetch({
+            /*this.fetch({
                 reset: true,
                 success: function (model, xhr, options) {
                     console.log('===== category fetched =====')
@@ -33,7 +33,7 @@ define([
                 error: function (model, xhr, options) {
                     console.log('fetch error')
                 }
-            })
+            })*/
         }
     });
 
