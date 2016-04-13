@@ -1,11 +1,19 @@
 
 //var customer = new Customer({name: 'Roma', email: 'petya@mail.ru'}, {validate: false});
 
-define(['views/customer/list', 'views/category/list'], function(Customers, Categories){
+define([
+    'backbone',
+/*    'views/customer/list',
+    'views/category/list',*/
+    'routes/router'], function(Backbone, Router){
     function init(){
-        console.log('< ==== initialize app ==== >');
-        var customers = new Customers();
-        var category = new Categories();
+        var router = new Router();
+        Backbone.history.start();                     //TODO PUSH STATE // {silent:true => no default}
+
+
+        //Backbone.history.navigate('#user', {trigger: true});      // same result but + history
+        //Backbone.history.navigate('#user');                       // no trigger - no result
+        //window.location.hash = '#user';                           // no history
     }
 
     return {

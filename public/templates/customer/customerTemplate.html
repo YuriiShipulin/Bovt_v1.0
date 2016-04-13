@@ -1,0 +1,31 @@
+<div class="col-sm-10">
+    <table class="table">
+        <tr>
+            <th>Image</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+            <th>Email</th>
+            <th colspan="2"></th>
+        </tr>
+
+        <tbody id="table">
+        <%collection.forEach(function(model){%>
+        <tr id="<%=model.id%>">
+            <td><img src="<%= model.get('image') %>" style="width:50px; height:50px"></td>
+            <td><%= model.get('name')%></td>
+            <td><%= model.get('surname')%></td>
+            <td><%= model.get('age')%></td>
+            <td><%= model.get('email')%></td>
+            <td><button type="button" class="btn btn-primary" id="editBtn">Edit</button></td>
+            <td><button type="button" class="btn btn-danger" id="removeBtn">Remove</button></td>
+        </tr>
+        <%})%>
+        <tr>
+            <div>
+                <button type="button" class="btn btn-success btn-lg" id="createBtn">Create</button>
+            </div>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -65,7 +65,6 @@ var schema = new Schema({
     image : {
         type: String,
         unique: false,
-        default : '/images/profile_pics/placeholder.png'
     }
 });
 

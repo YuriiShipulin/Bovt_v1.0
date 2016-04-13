@@ -158,9 +158,11 @@ module.exports = function () {
                     err.status = 400;
 
                     return next(err);
+
+                } else {
+                    req.session.customer = customer._id;
+                    res.status(200).send(customer);
                 }
-                req.session.customer = customer._id;
-                res.status(200).send('CUSTOMER SAVED: ' + customer);
             });
         }
     };
@@ -169,16 +171,16 @@ module.exports = function () {
         var id = req.params.id;
 
         if (validator.isMongoId(id)) {
-            Customer.findByIdAndRemove(id, function (err) {
+            Customer.findByIdAndRemove(id, function (err, result) {
                 if (err) {
                     err.status = 400;
                     err.message = 'Bad params';
 
                     return next(err);
                 } else {
-                    res.status(200).send('Customer: ' + id + " deleted");
+                    res.status(200).send(result);
                 }
-            })
+            });
 
         } else {
             var err = new Error();

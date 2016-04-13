@@ -9,20 +9,12 @@ define([
 
     var View = Backbone.View.extend({
 
-        el: '#container_2',
+        el: '#container',
 
         template: _.template(categoryTemplate),
 
         initialize : function(){
-            var self = this;
-
-            this.categories = new Categories();
-
-            this.categories.fetch({reset: true});
-
-            this.categories.on('reset', function(){
-                self.render();
-            });
+            this.render();
         },
 
         events: {
@@ -37,7 +29,7 @@ define([
         render : function(){
             var self = this;
 
-            this.categories.each(function(category){
+            this.collection.each(function(category){
                 self.$el.append(self.template(category.toJSON()));
             });
         }

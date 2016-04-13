@@ -30,6 +30,7 @@ define(['backbone'], function(Backbone) {
             });
         },
 
+
         defaults: {
             role: '0',
             orders: [],
@@ -38,9 +39,9 @@ define(['backbone'], function(Backbone) {
             surname: '',
             email: '',
             password: '',
-            age: 23,
+            age: '',
             phone: '',
-            image: '',
+            image: '/images/profile_pics/placeholder.png',
             lastVisit: Date.now
         }
     });

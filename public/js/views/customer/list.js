@@ -1,11 +1,10 @@
-
 define([
     'backbone',
     'collections/customer',
     'underscore',
-    'text!/templates/customer/customerTemplate.htm'
+    'text!/templates/customer/customerTemplate.html'
 
-], function(Backbone, Customers, _, customerTemplate){
+], function (Backbone, Customers, _, customerTemplate) {
 
     var View = Backbone.View.extend({
 
@@ -13,33 +12,53 @@ define([
 
         template: _.template(customerTemplate),
 
-        initialize : function(){
-            var self = this;
-
-            this.customersList = new Customers();
-
-            this.customersList.fetch({reset: true});
-
-            this.customersList.on('reset', function(){
-                self.render();
-            });
+        initialize: function () {
+            this.render();
         },
 
         events: {
-           'click div' : 'onDivClick'
+            'click #createBtn': 'onCreate',
+            'click #editBtn': 'onEdit',
+            'click #removeBtn': 'onRemove'
         },
 
-        onDivClick : function(e){
+        onCreate: function (e) {
             e.stopPropagation();
-            console.log('---click on customer img---');
+            Backbone.history.navigate('#app/customer/create', {trigger: true});
         },
 
-        render : function(){
-            var self = this;
+        onEdit: function (e) {
+            e.stopPropagation();
+        },
 
-            this.customersList.each(function(customer){
-                self.$el.append(self.template(customer.toJSON()));
+        onRemove: function (e) {
+            var $target = $(e.target);
+            var $tr = $target.closest('tr');
+            var userId = $tr.attr('id');
+            var model = this.collection.get(userId);
+
+            e.stopPropagation();
+
+            if (!model) {
+                return false;
+            }
+
+            model.destroy({
+                wait: true,
+                success: function (model) {
+                    console.log('---- Removed ' + model.id + ' ----');
+                    Backbone.history.fragment = '';
+                    Backbone.history.navigate('#app/customer', {trigger: true});
+                },
+                error: function (model, xhr) {
+                    alert(xhr.statusText);
+                }
             });
+        },
+
+
+        render: function () {
+            this.$el.html(this.template({collection: this.collection.models}));
         }
     });
 
