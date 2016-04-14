@@ -2,15 +2,15 @@ define([
     'backbone',
     'collections/customer',
     'underscore',
-    'text!/templates/customer/customerTemplate.html'
+    'text!/templates/customer/list.html'
 
-], function (Backbone, Customers, _, customerTemplate) {
+], function (Backbone, Customers, _, list) {
 
     var View = Backbone.View.extend({
 
         el: '#container',
 
-        template: _.template(customerTemplate),
+        template: _.template(list),
 
         initialize: function () {
             this.render();

@@ -101,14 +101,14 @@ module.exports = function () {
                     if (customer) {
                         if (customer.checkPassword(pass)) {
                             req.session.customer = customer._id;
-                            res.status(200).send('authorized successfully')
+                            res.status(200).send(customer)
                         } else {
 
-                            res.status(403).send('Not authorized(Password)')
+                            res.status(400).send('Not authorized(Password)')
                         }
                     } else {
 
-                        res.status(403).send('Not authorized(Login)');
+                        res.status(400).send('Not authorized(Login)');
                     }
                 });
         } else {
@@ -123,10 +123,7 @@ module.exports = function () {
     this.create = function (req, res, next) {                           //VALIDATION TODO
         var body = req.body;
         var errorMessage;
-
-       /* if(body.role){                                                //VALIDATION TODO
-            body.role = null;
-        }*/
+        console.log("INSIDE CREATE");
 
         if (body.name && !validator.isAlpha(body.name)) {
             errorMessage = 'Validation failed on Name: ' + body.name + '\r\n';

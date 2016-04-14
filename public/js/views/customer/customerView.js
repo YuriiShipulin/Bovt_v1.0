@@ -3,16 +3,15 @@ define([
     'backbone',
     'models/customer',
     'underscore',
-    'text!/templates/customer/customerTemplate.html',
     'text!/templates/customer/list.html'
 
-], function(Backbone, Customer, _, tableTemplate, customerTemplate){
+], function(Backbone, Customer, _, list){
 
     var View = Backbone.View.extend({
 
         el: '#content',
 
-        template: _.template(customerTemplate),
+        template: _.template(list),
 
         initialize : function(){
             var self = this;

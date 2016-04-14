@@ -4,15 +4,14 @@ define([
     return Backbone.Router.extend({
         routes: {
             //'app/user': 'userRouter',
+            'app' : 'login',
             'app/customer/create': 'createUser',
             'app/login': 'login',
             'app/:content' : 'contentRouter',
-            '*any': 'defaultRouter'
+            '*any': 'login'
         },
 
         createUser: function(){
-
-
             var self = this;
 
             require([
@@ -23,9 +22,6 @@ define([
                 }
 
                 self.view = new CreateView();
-                self.view.on('edit', function(){
-                    console.log('got Event')
-                });
             });
         },
 
