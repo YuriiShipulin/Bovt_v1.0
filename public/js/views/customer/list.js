@@ -19,7 +19,17 @@ define([
         events: {
             'click #createBtn': 'onCreate',
             'click #editBtn': 'onEdit',
-            'click #removeBtn': 'onRemove'
+            'click #removeBtn': 'onRemove',
+            'click img': 'onCustomer'
+        },
+
+        onCustomer: function(e){
+            var $target = $(e.target);
+            var $tr = $target.closest('tr');
+            var userId = $tr.attr('id');
+
+            e.stopPropagation();
+            Backbone.history.navigate('#app/customer/' + userId, {trigger: true});
         },
 
         onCreate: function (e) {
@@ -64,10 +74,3 @@ define([
 
     return View;
 });
-
-/* tagName: 'ul',
- className: 'my-class',
- id: 'temp',
- attributes: {
- 'data-name': 'temp'
- }*/

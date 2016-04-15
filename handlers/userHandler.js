@@ -123,7 +123,6 @@ module.exports = function () {
     this.create = function (req, res, next) {                           //VALIDATION TODO
         var body = req.body;
         var errorMessage;
-        console.log("INSIDE CREATE");
 
         if (body.name && !validator.isAlpha(body.name)) {
             errorMessage = 'Validation failed on Name: ' + body.name + '\r\n';
@@ -193,7 +192,7 @@ module.exports = function () {
         var body = req.body;
         var errorMessage;
 
-        if(body.role){
+        if (body.role) {
             body.role = null;
         }
 
@@ -223,7 +222,6 @@ module.exports = function () {
 
             return next(err);
         } else {
-            //body.image = image;
             Customer.findByIdAndUpdate(id, body, {new: true}, function (err) {
                 if (err) {
                     err.status = 400;
@@ -246,25 +244,49 @@ module.exports = function () {
         var supportedTypes = ['image/jpg', 'image/png', 'image/jpeg'];
         var errors = [];
 
+        var id = req.params.id;
+
         form.on('error', function (err) {
+
             if (fs.existsSync(uploadFile.path)) {
                 fs.unlinkSync(uploadFile.path);
             }
+            err.status = 400;
+            err.message = errors.toString();
+
+            res.status(400).send(err);
         });
 
         form.on('close', function () {
             if (errors.length == 0) {
-                req.body.image = uploadFile.path;
-                next();
-            }
+                var path = uploadFile.path.split('/').slice(2).join('/');
 
-            else {
-                if (fs.existsSync(uploadFile.path)) {
-                    fs.unlinkSync(uploadFile.path);
+                Customer
+                    .findByIdAndUpdate(id, {image: path}, {new: true}, function (err) {
+                        if (err) {
+                            err.status = 400;
+                            err.message = errors.toString();
+
+                            res.status(400).send(err);
+
+                        } else {
+                           res.redirect('/#app/customer/' + id);
+                        }
+                    });
+
+            } else {
+
+                    if (fs.existsSync(uploadFile.path)) {
+                        fs.unlinkSync(uploadFile.path);
+                    }
+
+                    var err = new Error();
+                    err.status = 400;
+                    err.message = errors.toString();
+
+                    res.status(400).send(err);
                 }
-                next();
-            }
-        });
+            });
 
         form.on('part', function (part) {
             uploadFile.size = part.byteCount;
@@ -279,16 +301,20 @@ module.exports = function () {
                 errors.push('Unsupported type ' + uploadFile.type);
             }
 
+            if(!uploadFile){
+                errors.push('NO FILE');
+            }
+
             if (errors.length == 0) {
                 var out = fs.createWriteStream(uploadFile.path);
                 part.pipe(out);
-            }
-            else {
+
+            } else {
                 part.resume();
             }
-
-            form.parse(req);
         });
+
+        form.parse(req);
     };
 };
 

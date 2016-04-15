@@ -3,39 +3,55 @@ define([
     'backbone',
     'models/customer',
     'underscore',
-    'text!/templates/customer/list.html'
+    'text!/templates/customer/customerTemplate.html'
 
-], function(Backbone, Customer, _, list){
+], function(Backbone, Customer, _, customerTemplate){
 
     var View = Backbone.View.extend({
 
-        el: '#content',
+        el: '#container',
 
-        template: _.template(list),
+        template: _.template(customerTemplate),
 
-        initialize : function(){
-            var self = this;
+        events: {
+            'click #editBtn': 'onEdit',
+            'click #removeBtn': 'onRemove',
+        },
 
-            this.customer = new Customer();
+        onEdit: function (e) {
+            e.stopPropagation();
+        },
 
-            this.customer.fetch({reset: true});
+        onRemove: function (e) {
+            var model = this.model;
 
-            this.customer.on('reset', function(){
-                self.render();
+            e.stopPropagation();
+
+            if (!model) {
+                return false;
+            }
+
+            model.destroy({
+                wait: true,
+                success: function (model) {
+                    Backbone.history.fragment = '';
+                    Backbone.history.navigate('#app/customer', {trigger: true});
+                },
+
+                error: function (model, xhr) {
+                    alert(xhr.statusText);
+                }
             });
         },
 
+        initialize : function(){
+            this.render();
+        },
+
         render : function(){
-                this.$el.html(this.template(customer.toJSON()));
-            }
+            this.$el.html(this.template({model: this.model}));
+        }
     });
 
     return View;
 });
-
-/* tagName: 'ul',
- className: 'my-class',
- id: 'temp',
- attributes: {
- 'data-name': 'temp'
- }*/

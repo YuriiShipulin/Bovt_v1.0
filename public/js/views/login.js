@@ -53,7 +53,6 @@ define([
         },
 
         onSignup: function (e) {
-            e.stopPropagation();
 
             Backbone.history.navigate('#app/customer/create', {trigger: true});
         },

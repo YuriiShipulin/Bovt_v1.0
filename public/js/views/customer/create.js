@@ -13,12 +13,10 @@ define([
 
         events: {
             'click #saveBtn': 'onSave',
-            'click #cancelBtn': 'onCancel'
+            'click #cancelBtn': 'onCancel',
         },
 
         onSave: function (e) {
-
-
             var $thisEl = this.$el;
             var name;
             var surname;
@@ -42,6 +40,7 @@ define([
                 phone: phone,
                 password: password
             });
+
             console.log(this.customer.toJSON());
 
             this.customer.save(null, {
