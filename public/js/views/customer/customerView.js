@@ -15,7 +15,7 @@ define([
 
         events: {
             'click #editBtn': 'onEdit',
-            'click #removeBtn': 'onRemove',
+            'click #removeBtn': 'onRemove'
         },
 
         onEdit: function (e) {

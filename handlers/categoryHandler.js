@@ -32,9 +32,9 @@ module.exports = function () {
                         return next(err);
                     }
 
-                    items = category.items;
-                    res.status(200).send(items);
-                    //res.status(200).send(category);       //sends JSON file instead of array
+                    //items = category.items;
+                    //res.status(200).send(items);
+                    res.status(200).send(category);       //sends JSON file instead of array
                 });
 
         } else {
@@ -82,7 +82,7 @@ module.exports = function () {
             }
 
         });
-        res.status(200).send(category.name + ' was created');
+        res.status(200).send(category);
     };
 
     this.delete = function (req, res, next) {
@@ -91,14 +91,14 @@ module.exports = function () {
         if (validator.isMongoId(id)) {
 
             Category
-                .findByIdAndRemove(id, function (err) {
+                .findByIdAndRemove(id, function (err, category) {
                 if (err) {
                     err.status = 400;
                     err.message = 'Bad params: ' + id;
 
                     return next(err)
                 } else {
-                    res.status(200).send('Category: ' + id + " deleted");
+                    res.status(200).send(category);
                 }
             });
 
@@ -118,11 +118,11 @@ module.exports = function () {
         if (validator.isMongoId(id)) {
             body = req.body;
             Category
-                .findByIdAndUpdate(id, body, {new: true}, function (err) {
+                .findByIdAndUpdate(id, body, {new: true}, function (err, category) {
                 if (!err) {
                     res.status(400).send('Bad params');
                 } else {
-                    res.status(200).send('Category: ' + id + " updated");
+                    res.status(200).send(category);
                 }
             });
 

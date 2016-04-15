@@ -13,35 +13,45 @@ define([
 
         events: {
             'click #saveBtn': 'onSave',
-            'click #cancelBtn': 'onCancel',
+            'click #cancelBtn': 'onCancel'
         },
 
         onSave: function (e) {
             var $thisEl = this.$el;
             var name;
+            var age;
             var surname;
             var email;
             var phone;
             var password;
+            var confirmPassword;
+
 
             e.stopPropagation();
             e.preventDefault();
 
             name = $thisEl.find('#name').val();
+            age = $thisEl.find('#age').val();
             surname = $thisEl.find('#surname').val();
             email = $thisEl.find('#email').val();
             phone = $thisEl.find('#phone').val();
             password = $thisEl.find('#password').val();
+            confirmPassword = $thisEl.find('#confirmPassword').val();
+
+            if(password !== confirmPassword) {
+                alert('passwords do not match');
+
+                return;
+            }
 
             this.customer = new Customer({
                 name: name,
+                age: age,
                 surname: surname,
                 email: email,
                 phone: phone,
                 password: password
             });
-
-            console.log(this.customer.toJSON());
 
             this.customer.save(null, {
                 wait: true,

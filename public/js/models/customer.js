@@ -28,6 +28,10 @@ define(['backbone'], function(Backbone) {
             this.on('change:name', function (model, error) {
                 console.log('name is changed');
             });
+
+            this.on('change:image', function (model, error) {
+                console.log('image is changed');
+            });
         },
 
 

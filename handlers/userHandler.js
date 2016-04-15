@@ -270,7 +270,8 @@ module.exports = function () {
                             res.status(400).send(err);
 
                         } else {
-                           res.redirect('/#app/customer/' + id);
+                            res.status(304);
+                            res.redirect('/#app/customer/' + id);
                         }
                     });
 

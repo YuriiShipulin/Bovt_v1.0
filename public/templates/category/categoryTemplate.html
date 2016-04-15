@@ -1,0 +1,8 @@
+<div id="categoryTemplate" class="col-sm-6" align="left">
+    <img src="<%= model.get('image') %>" style="width:500px;height:300px;margin-top: 25px"/>
+    <p><%= model.get('name') ? model.get('name') : 'unknown' %></p>
+    <p><%= model.get('description') %></p>
+    <div>
+        <button type="button" class="btn btn-success btn-lg" id="productsBtn">View items</button>
+    </div>
+</div>
