@@ -1,34 +1,33 @@
 <div class="col-sm-10">
-    <h2>Categories</h2>
+    <h2>Item id: <%=model.id%></h2>
     <table class="table">
         <tr>
             <th>Image</th>
             <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Category</th>
             <th>Description</th>
-            <th></th>
-            <th>
-                <div>
-                    <button type="button" class="btn btn-success" id="createBtn">Create</button>
-                </div>
-            </th>
+            <th>Long Description</th>
             <th colspan="2"></th>
         </tr>
 
         <tbody id="table">
-        <%collection.forEach(function(model){%>
         <tr id="<%=model.id%>">
-            <td><img src="<%= model.get('image') %>" style="width:120px; height:90px"></td>
-            <td><span class="label label-default"><%= model.get('name')%></span></td>
+            <td><img src="<%= model.get('image') %>" style="width:120px; height:120px"></td>
+            <td><%= model.get('name')%></td>
+            <td><span class="label label-default"><%= model.get('price')%></span></td>
+            <td><span class="label label-default"><%= model.get('quantity')%></span></td>
+            <td><%= model.get('category')%></td>
             <td><%= model.get('description')%></td>
+            <td><%= model.get('longDesc')%></td>
             <td>
                 <button type="button" class="btn btn-primary" id="editBtn">Edit</button>
             </td>
             <td>
                 <button type="button" class="btn btn-danger" id="removeBtn">Remove</button>
             </td>
-            <tr>
         </tr>
-        <%})%>
         </tbody>
     </table>
 </div>

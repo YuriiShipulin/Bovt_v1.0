@@ -13,16 +13,47 @@ define([
             'app/category/:id': 'fetchCategory',
             'app/category/:id/items': 'fetchCategoryItems',
 
+            'app/item/create': 'createItem',
+            'app/item/:id': 'fetchItem',
+
             'app/login': 'login',
             '*any': 'login'
         },
 
         initialize : function(options){
-            /*this.channel = options.channel;
-            this.channel.on();*/
+
         },
 
-        fetchCategoryItems: function(id){               //TODO Item templates & views
+        fetchItem: function(id){
+            var self = this;
+            var modelUrl = 'models/item';
+            var viewUrl = 'views/item/itemView';
+
+            require([
+                modelUrl
+            ], function (Model) {
+                var model = new Model();
+                model.set('_id', id);
+
+                model.fetch({
+                    success: function (model) {
+
+                        require([
+                            viewUrl
+                        ], function (CreateView) {
+                            if (self.view) {
+
+                                self.view.undelegateEvents();
+                            }
+
+                            self.view = new CreateView({model: model});
+                        });
+                    }
+                });
+            });
+        },
+
+        fetchCategoryItems: function(id){               //TODO Item templates & views & WTF is wrong wth view+collection
             var self = this;
 
             var modelUrl = 'models/category';
@@ -35,16 +66,18 @@ define([
                 model.urlRoot = 'category/' + id + '/items';
 
                 model.fetch({
-                    success: function (model) {
-
+                    success: function (items) {
                         require([
                             viewUrl
                         ], function (CreateView) {
                             if (self.view) {
+                                self.collectoin = items;
 
                                 self.view.undelegateEvents();
                             }
-                            self.view = new CreateView({model: model});
+
+                            console.dir('CAL' + items);
+                            self.view = new CreateView({collection: self.collection});
                         });
                     }
                 });
@@ -69,7 +102,6 @@ define([
             var self = this;
             var modelUrl = 'models/category';
             var viewUrl = 'views/category/categoryView';
-
 
             require([
                 modelUrl

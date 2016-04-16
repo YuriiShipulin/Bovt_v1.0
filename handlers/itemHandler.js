@@ -18,7 +18,7 @@ module.exports = function () {
                         return next(err)
                     }
 
-                    if (item.length) {
+                    if (item) {
 
                         res.status(200).send(item);
                     } else {

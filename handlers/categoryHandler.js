@@ -29,12 +29,13 @@ module.exports = function () {
 
                     if (err) {
                         err.status = 400;
+
                         return next(err);
                     }
 
-                    //items = category.items;
-                    //res.status(200).send(items);
-                    res.status(200).send(category);       //sends JSON file instead of array
+                    items = category.items;
+                    res.status(200).send(items);
+                    //res.status(200).send(category);       //sends JSON file instead of array
                 });
 
         } else {
