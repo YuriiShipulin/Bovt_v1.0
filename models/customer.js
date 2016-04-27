@@ -86,16 +86,4 @@ schema.methods.checkPassword = function(password){
     return this.encryptPassword(password) === this.passwordHash;
 };
 
-schema.methods.buy = function(){
-    //TODO
-};
-
-schema.methods.makeComment = function(commentName){
-    //TODO
-};
-
-schema.methods.deleteComment = function(commentName){
-    //TODO
-};
-
 module.exports = mongoose.model("Customer", schema);

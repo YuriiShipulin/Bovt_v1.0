@@ -3,7 +3,8 @@ define([
 ], function (Backbone) {
     return Backbone.Router.extend({
         routes: {
-            'app': 'login',
+            'app': 'navigationBar',
+            'app/login': 'login',
             'app/:content(/p=:page)(/c=:count)': 'contentRouter',
 
             'app/customer/create': 'createUser',
@@ -16,12 +17,29 @@ define([
             'app/item/create': 'createItem',
             'app/item/:id': 'fetchItem',
 
-            'app/login': 'login',
-            '*any': 'login'
+            '*any': 'default'
         },
 
         initialize : function(options){
+        },
 
+        default : function(){
+            console.log("INSIDE DAFAULT");
+            Backbone.history.navigate('#app', {trigger: true});
+        },
+
+        navigationBar : function(){
+            var self = this;
+
+            require([
+                'views/navigationBar'
+            ], function (NavigationBar) {
+                if (self.view) {
+                    self.view.undelegateEvents();
+                }
+
+                self.view = new NavigationBar();
+            });
         },
 
         fetchItem: function(id){

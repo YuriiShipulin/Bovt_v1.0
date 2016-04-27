@@ -21,8 +21,4 @@ var schema = new Schema({
     }]
 });
 
-schema.methods.buy = function(){
-    //TODO
-};
-
 module.exports = mongoose.model("User", schema);

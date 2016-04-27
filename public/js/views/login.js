@@ -1,10 +1,10 @@
 define([
-    'backbone',
-    'underscore',
-    'models/customer',
-    'text!templates/login.html'
-], function (Backbone, _, Customer, login) {
-    return Backbone.View.extend({
+        'backbone',
+        'underscore',
+        'models/customer',
+        'text!templates/login.html'
+    ], function (Backbone, _, Customer, login) {
+        return Backbone.View.extend({
         el      : '#container',
         template: _.template(login),
         events  : {
@@ -26,8 +26,6 @@ define([
 
             email = $thisEl.find('#email').val();
             password = $thisEl.find('#password').val();
-
-
 
             this.model = new Customer({
                 email: email,

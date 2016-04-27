@@ -42,36 +42,4 @@ schema.methods.checkPassword = function(password){
     return this.encryptPassword(password) === this.passwordHash;
 };
 
-schema.methods.createCategory = function(categoryName){
-    //TODO
-};
-
-schema.methods.deleteCategory = function(categoryName){
-    //TODO
-};
-
-schema.methods.updateCategory = function(categoryName){
-    //TODO
-};
-
-schema.methods.createItem = function(itemName){
-    //TODO
-};
-
-schema.methods.deleteItem = function(itemName){
-    //TODO
-};
-
-schema.methods.updateItem = function(itemName){
-    //TODO
-};
-
-schema.methods.makeComment = function(commentName){
-    //TODO
-};
-
-schema.methods.deleteComment = function(commentName){
-    //TODO
-};
-
 module.exports = mongoose.model("Admin", schema);
